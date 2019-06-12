@@ -8,8 +8,8 @@ spring boot starter for rocker template
 spring.rocker.enabled=true
 spring.rocker.reloading=true
 spring.rocker.templateResolverOrder=214748213637
-spring.rocker.prefix="classpath:/templates/"
-spring.rocker.suffix=".rocker.html"
+spring.rocker.prefix=classpath:/templates/
+spring.rocker.suffix=.rocker.html
 spring.rocker.contentType="text/html;charset=utf-8"
 spring.rocker.expose-request-attribute=false
 spring.rocker.allow-request-override=false
