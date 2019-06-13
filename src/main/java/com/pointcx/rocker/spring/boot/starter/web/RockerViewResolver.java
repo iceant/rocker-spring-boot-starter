@@ -50,6 +50,8 @@ public class RockerViewResolver extends UrlBasedViewResolver {
         view.setExposeSpringMacroHelpers(properties.isExposeSpringMacroHelpers());
         view.setExposeSessionAttributes(properties.isExposeSessionAttributes());
         view.setExposeRequestAttributes(properties.isExposeRequestAttributes());
+        view.setAllowRequestOverride(properties.isAllowRequestOverride());
+        view.setAllowSessionOverride(properties.isAllowSessionOverride());
         return view;
     }
 
