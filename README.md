@@ -55,10 +55,10 @@ spring boot starter for rocker template
                             <goal>generate</goal>
                         </goals>
                         <configuration>
-                            <javaVersion>${java.version}</javaVersion>                          <!-- 产生的Java源文件的版本 -->
-                            <templateDirectory>src/main/resources</templateDirectory>           <!-- 模板源文件目录，Rocker会自动扫描其子目录，并用目录名作为产生的Java文件的包名 -->
-                            <outputDirectory>target/generated-sources/rocker</outputDirectory>  <!-- 输出目录，相对项目根目录 -->
-                            <discardLogicWhitespace>true</discardLogicWhitespace>               <!-- 删除模板标记带来的空行，此选项也可以在模板中用"@option discardLogicWhitespace=true"打开 -->
+                            <javaVersion>${java.version}</javaVersion>                          
+                            <templateDirectory>src/main/resources</templateDirectory>           
+                            <outputDirectory>target/generated-sources/rocker</outputDirectory>  
+                            <discardLogicWhitespace>true</discardLogicWhitespace>              
                             <targetCharset>UTF-8</targetCharset>
                             <postProcessing>
                                 <param>com.fizzed.rocker.processor.LoggingProcessor</param>
