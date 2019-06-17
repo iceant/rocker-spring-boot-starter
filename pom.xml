@@ -63,7 +63,6 @@
             <groupId>com.fizzed</groupId>
             <artifactId>rocker-compiler</artifactId>
             <version>${rocker.version}</version>
-            <scope>provided</scope>
         </dependency>
 
         <dependency>
