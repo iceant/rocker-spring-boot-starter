@@ -3,6 +3,89 @@ spring boot starter for rocker template
 
 ## Usage
 
+### How to use
+
+> I'm apply for release to maven centory repository now, before that, you can follow the following steps to use.
+
+#### Step 1, Clone the project to local workspace
+- You can run `mvn install` to install this artifact to your local repository. 
+
+#### Step 2, Add as dependency to your project 
+```xml
+<dependencies>
+    <dependency>
+        <groupId>com.pointcx</groupId>
+        <artifactId>rocker-spring-boot-starter</artifactId>
+        <version>1.2.1</version>
+    </dependency>
+    
+    <dependency>
+        <groupId>com.fizzed</groupId>
+        <artifactId>rocker-runtime</artifactId>
+        <version>1.2.1</version>
+    </dependency>
+    
+    <!-- for hot-reloading support only during development -->
+    <dependency>
+        <groupId>com.fizzed</groupId>
+        <artifactId>rocker-compiler</artifactId>
+        <version>1.2.1</version>
+        <scope>provided</scope>
+    </dependency>
+</dependencies>
+```
+
+#### Step 3, Config build plugin in pom.xml
+> - rocker-spring-boot-starter will enable dynamic reloading by default.
+> - this configuration is optional. for convince, you can add to your pom.xml and run 'mvn generate-sources' to generate java code manually. 
+```xml
+<build>
+        
+        <plugins>
+<!--            ...-->
+            <plugin>
+                <groupId>com.fizzed</groupId>
+                <artifactId>rocker-maven-plugin</artifactId>
+                <version>1.2.1</version>
+                <executions>
+                    <execution>
+                        <id>generate-rocker-templates</id>
+                        <phase>generate-sources</phase>
+                        <goals>
+                            <goal>generate</goal>
+                        </goals>
+                        <configuration>
+                            <javaVersion>${java.version}</javaVersion>                          <!-- 产生的Java源文件的版本 -->
+                            <templateDirectory>src/main/resources</templateDirectory>           <!-- 模板源文件目录，Rocker会自动扫描其子目录，并用目录名作为产生的Java文件的包名 -->
+                            <outputDirectory>target/generated-sources/rocker</outputDirectory>  <!-- 输出目录，相对项目根目录 -->
+                            <discardLogicWhitespace>true</discardLogicWhitespace>               <!-- 删除模板标记带来的空行，此选项也可以在模板中用"@option discardLogicWhitespace=true"打开 -->
+                            <targetCharset>UTF-8</targetCharset>
+                            <postProcessing>
+                                <param>com.fizzed.rocker.processor.LoggingProcessor</param>
+                                <param>com.fizzed.rocker.processor.WhitespaceRemovalProcessor</param>
+                            </postProcessing>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+<!--...            -->
+        </plugins>
+    </build>
+```
+
+#### Step 4,  Add/Modify `application.properties` in your project
+for example:
+```properties
+spring.rocker.enabled=true
+spring.rocker.reloading=true
+spring.rocker.expose-request-attributes=true
+spring.rocker.allow-request-override=true
+spring.rocker.expose-session-attributes=false
+spring.rocker.expose-spring-macro-helpers=true
+spring.rocker.suffix=.html
+spring.rocker.prefix=classpath:/rocker/
+``` 
+
 ### Configuration
 ```properties
 spring.rocker.enabled=true
@@ -164,18 +247,18 @@ $r.field("user", "username"); /*user stored in request.attribute, this will invo
 
 #### Get context path
 ```html
-<img src='$r.path("/static/images/logo.png")'/>
+<img src='@$r.path("/static/images/logo.png")'/>
 ```
 
 #### Access CSRF token
 ```html
 <head>
-    <meta name="_csrf" content="$r.csrf()"/>
-    <meta name="_csrf_header" content="$r.csrfTokenHeaderName()"/>
+    <meta name="_csrf" content="@$r.csrf()"/>
+    <meta name="_csrf_header" content="@$r.csrfTokenHeaderName()"/>
 </head>
 <body>
     <form method="post">
-        <input type="hidden" name="$r.csrfTokenParameterName()" value="$r.csrf()">
+        <input type="hidden" name="@$r.csrfTokenParameterName()" value="@$r.csrf()">
     </form>
     
     <script>
