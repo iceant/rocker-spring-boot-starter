@@ -407,7 +407,7 @@ public class $r implements ApplicationContextAware {
                     return springRocker.template(((ClassPathResource) resource).getPath());
                 }
             }
-            return springRocker.template(templatePath);
+            return springRocker.template(templatePath+rockerViewResolver.getProperties().getSuffix());
         }
         return null;
     }
@@ -421,7 +421,7 @@ public class $r implements ApplicationContextAware {
                     return springRocker.template(((ClassPathResource) resource).getPath(), arguments);
                 }
             }
-            return springRocker.template(templatePath, arguments);
+            return springRocker.template(templatePath+rockerViewResolver.getProperties().getSuffix(), arguments);
         }
         return null;
     }
