@@ -401,13 +401,7 @@ public class $r implements ApplicationContextAware {
     public static BindableRockerModel template(String templatePath){
         loadBeans();
         if(springRocker!=null){
-            if(rockerViewResolver!=null){
-                Resource resource = rockerViewResolver.resolveResource(templatePath, LocaleContextHolder.getLocale());
-                if(resource instanceof ClassPathResource){
-                    return springRocker.template(((ClassPathResource) resource).getPath());
-                }
-            }
-            return springRocker.template(templatePath+rockerViewResolver.getProperties().getSuffix());
+            return springRocker.template(templatePath);
         }
         return null;
     }
@@ -415,13 +409,7 @@ public class $r implements ApplicationContextAware {
     public static BindableRockerModel template(String templatePath, Object ... arguments){
         loadBeans();
         if(springRocker!=null){
-            if(rockerViewResolver!=null){
-                Resource resource = rockerViewResolver.resolveResource(templatePath, LocaleContextHolder.getLocale());
-                if(resource instanceof ClassPathResource){
-                    return springRocker.template(((ClassPathResource) resource).getPath(), arguments);
-                }
-            }
-            return springRocker.template(templatePath+rockerViewResolver.getProperties().getSuffix(), arguments);
+            return springRocker.template(templatePath, arguments);
         }
         return null;
     }
