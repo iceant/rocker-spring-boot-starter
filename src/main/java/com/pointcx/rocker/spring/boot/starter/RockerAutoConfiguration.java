@@ -1,10 +1,8 @@
 package com.pointcx.rocker.spring.boot.starter;
 
 import com.fizzed.rocker.runtime.RockerBootstrap;
-import com.fizzed.rocker.runtime.RockerRuntime;
 import com.pointcx.rocker.spring.boot.starter.reload.SpringRockerDefaultBootstrap;
 import com.pointcx.rocker.spring.boot.starter.reload.SpringRockerReloadingBootstrap;
-import com.pointcx.rocker.spring.boot.starter.util.RockerInternalUtil;
 import com.pointcx.rocker.spring.boot.starter.web.RockerViewResolver;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
@@ -24,7 +22,6 @@ public class RockerAutoConfiguration {
 
     public RockerAutoConfiguration(RockerProperties properties) {
         this.properties = properties;
-        RockerRuntime.getInstance().setReloading(this.properties.isReloading());
     }
 
     @Bean

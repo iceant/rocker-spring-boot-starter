@@ -17,6 +17,7 @@ import org.springframework.context.ApplicationContextAware;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.core.io.Resource;
 
+import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -55,6 +56,16 @@ public class SpringRockerReloadingBootstrap implements RockerReloadableBootstrap
         this.classLoader = (classLoader == null) ? buildClassLoader() : classLoader;
         this.templates = new ConcurrentHashMap<>();
         this.models = new ConcurrentHashMap<>();
+
+        if(properties.getTemplateDirectory()!=null){
+            this.configuration.setTemplateDirectory(new File(properties.getTemplateDirectory()));
+        }
+        if(properties.getClassDirectory()!=null){
+            this.configuration.setClassDirectory(new File(properties.getClassDirectory()));
+        }
+        if(properties.getOutputDirectory()!=null){
+            this.configuration.setOutputDirectory(new File(properties.getOutputDirectory()));
+        }
     }
 
     @Override
@@ -140,10 +151,10 @@ public class SpringRockerReloadingBootstrap implements RockerReloadableBootstrap
 
         String templateName = templatePath;
 
-        if (templateName.startsWith(prefix)) {
+        if (prefix!=null && prefix.length()>0 && templateName.startsWith(prefix)) {
             templateName = templateName.substring(prefix.length() + 1);
         }
-        if (templateName.endsWith(suffix)) {
+        if (suffix!=null && suffix.length()>0 && templateName.endsWith(suffix)) {
             templateName = templateName.substring(0, templateName.length() - suffix.length());
         }
 
@@ -216,7 +227,7 @@ public class SpringRockerReloadingBootstrap implements RockerReloadableBootstrap
         // recompile needed?
 
         Resource resource = RockerInternalUtil.resolveResource(template.path, LocaleContextHolder.getLocale(), applicationContext, properties);
-        if(resource==null){
+        if(resource==null || !resource.exists()){
             return false;
         }
 
