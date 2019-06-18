@@ -38,13 +38,7 @@ public class RockerViewResolver extends UrlBasedViewResolver {
 
     @Override
     protected View loadView(String viewName, Locale locale) throws Exception {
-        Resource templatePath = resolveResource(viewName, locale);
-        RockerView view = null;
-        if(templatePath instanceof ClassPathResource){
-            view = new RockerView(((ClassPathResource) templatePath).getPath(), rockerBootstrap, properties);
-        }else{
-            view = new RockerView(viewName+properties.getSuffix(), rockerBootstrap, properties);
-        }
+        RockerView view = new RockerView(viewName, rockerBootstrap, properties);
         view.setApplicationContext(getApplicationContext());
         view.setServletContext(getServletContext());
         view.setExposeSpringMacroHelpers(properties.isExposeSpringMacroHelpers());

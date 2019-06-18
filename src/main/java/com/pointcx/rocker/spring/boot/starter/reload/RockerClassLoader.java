@@ -6,15 +6,16 @@ import org.slf4j.LoggerFactory;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.net.URL;
 import java.net.URLConnection;
 
 public class RockerClassLoader extends ClassLoader {
-    static private final Logger log = LoggerFactory.getLogger(com.fizzed.rocker.reload.RockerClassLoader.class);
+    static private final Logger log = LoggerFactory.getLogger(RockerClassLoader.class);
 
-    private final SpringRockerReloadingBootstrap bootstrap;
+    private final RockerReloadableBootstrap bootstrap;
 
-    public RockerClassLoader(SpringRockerReloadingBootstrap bootstrap, ClassLoader parent) {
+    public RockerClassLoader(RockerReloadableBootstrap bootstrap, ClassLoader parent) {
         super(parent);
         this.bootstrap = bootstrap;
     }
@@ -30,28 +31,12 @@ public class RockerClassLoader extends ClassLoader {
             return super.loadClass(className);
         }
 
+        InputStream inputStream = null;
+        ByteArrayOutputStream outputStream = null;
         // load as though class was a resource
         try {
             // views.index -> views/index
             String resourceName = className.replace(".", "/") + ".class";
-
-            /**
-             URL url = null;
-
-             // attempt to load from rocker "compile" directory first
-             File recompiledFile = new File(this.bootstrap.getConfiguration().getCompileDirectory(), resourceName);
-
-             if (!recompiledFile.exists()) {
-             log.debug("Unable to find class in compileDirectory: {}", recompiledFile);
-
-             // fallback to resource
-             url = this.getResource(resourceName);
-             } else {
-
-             url = recompiledFile.toURI().toURL();
-
-             }
-             */
 
             URL url = this.getResource(resourceName);
 
@@ -63,21 +48,37 @@ public class RockerClassLoader extends ClassLoader {
 
             URLConnection connection = url.openConnection();
 
-            ByteArrayOutputStream buffer;
-            try (InputStream input = connection.getInputStream()) {
-                buffer = new ByteArrayOutputStream();
-                int data = input.read();
-                while (data != -1) {
-                    buffer.write(data);
-                    data = input.read();
-                }
-            }
+            byte[] buffer = new byte[1024];
+            int len;
 
-            byte[] classData = buffer.toByteArray();
+            inputStream = connection.getInputStream();
+            outputStream = new ByteArrayOutputStream();
+            while((len = inputStream.read(buffer))!=-1){
+                outputStream.write(buffer, 0, len);
+            }
+            outputStream.flush();
+
+            byte[] classData = outputStream.toByteArray();
 
             return defineClass(className, classData, 0, classData.length);
         } catch (IOException e) {
             throw new ClassNotFoundException(e.getMessage(), e);
+        }finally {
+            if(inputStream!=null){
+                try {
+                    inputStream.close();
+                } catch (IOException e) {
+                }
+                inputStream =null;
+            }
+
+            if(outputStream!=null){
+                try {
+                    outputStream.close();
+                } catch (IOException e) {
+                }
+                outputStream = null;
+            }
         }
     }
 

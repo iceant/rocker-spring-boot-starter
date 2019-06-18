@@ -7,6 +7,7 @@ import com.fizzed.rocker.TemplateBindException;
 import com.fizzed.rocker.runtime.OutputStreamOutput;
 import com.fizzed.rocker.runtime.RockerBootstrap;
 import com.pointcx.rocker.spring.boot.starter.RockerProperties;
+import org.springframework.core.io.Resource;
 import org.springframework.web.servlet.view.AbstractTemplateView;
 
 import javax.servlet.http.HttpServletRequest;
