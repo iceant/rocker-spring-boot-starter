@@ -6,6 +6,8 @@ import com.fizzed.rocker.TemplateBindException;
 import com.fizzed.rocker.TemplateNotFoundException;
 import com.fizzed.rocker.compiler.GeneratorException;
 import com.fizzed.rocker.compiler.RockerConfiguration;
+import com.fizzed.rocker.compiler.RockerOptions;
+import com.fizzed.rocker.compiler.TokenException;
 import com.fizzed.rocker.runtime.*;
 import com.pointcx.rocker.spring.boot.starter.RockerProperties;
 import com.pointcx.rocker.spring.boot.starter.compiler.RockerTemplateCompiler;
@@ -66,6 +68,19 @@ public class SpringRockerReloadingBootstrap implements RockerReloadableBootstrap
         if(properties.getOutputDirectory()!=null){
             this.configuration.setOutputDirectory(new File(properties.getOutputDirectory()));
         }
+        RockerOptions options = this.configuration.getOptions();
+        options.setDiscardLogicWhitespace(properties.isDiscardLogicWhitespace());
+        options.setExtendsClass(properties.getExtendsClass());
+        options.setExtendsModelClass(properties.getExtendsModelClass());
+        options.setOptimize(properties.isOptimize());
+        options.setTargetCharset(properties.getTargetCharset());
+        try {
+            options.setJavaVersion(properties.getJavaVersion());
+        } catch (TokenException e) {
+            e.printStackTrace();
+        }
+
+        this.configuration.setOptions(options);
     }
 
     @Override
