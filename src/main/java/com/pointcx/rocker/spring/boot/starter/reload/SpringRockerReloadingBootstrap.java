@@ -70,8 +70,12 @@ public class SpringRockerReloadingBootstrap implements RockerReloadableBootstrap
         }
         RockerOptions options = this.configuration.getOptions();
         options.setDiscardLogicWhitespace(properties.isDiscardLogicWhitespace());
-        options.setExtendsClass(properties.getExtendsClass());
-        options.setExtendsModelClass(properties.getExtendsModelClass());
+        if(properties.getExtendsClass()!=null) {
+            options.setExtendsClass(properties.getExtendsClass());
+        }
+        if(properties.getExtendsModelClass()!=null) {
+            options.setExtendsModelClass(properties.getExtendsModelClass());
+        }
         options.setOptimize(properties.isOptimize());
         options.setTargetCharset(properties.getTargetCharset());
         try {
