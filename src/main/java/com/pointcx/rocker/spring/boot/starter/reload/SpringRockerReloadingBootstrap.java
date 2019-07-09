@@ -162,6 +162,24 @@ public class SpringRockerReloadingBootstrap implements RockerReloadableBootstrap
     // -----------------------------------------------------------------------
     // <prefix>/path/to/index<.rocker.html> -> path/to/index -> path.to.index
     public String templatePathToClassName(String templatePath) {
+//        if (templatePath == null) {
+//            throw new NullPointerException("Template name was null");
+//        }
+//        String prefix = properties.getPrefix();
+//        String suffix = properties.getSuffix();
+//
+//        String templateName = templatePath;
+//
+//        if (prefix!=null && prefix.length()>0 && templateName.startsWith(prefix)) {
+//            templateName = templateName.substring(prefix.length() + 1);
+//        }
+//        if (suffix!=null && suffix.length()>0 && templateName.endsWith(suffix)) {
+//            templateName = templateName.substring(0, templateName.length() - suffix.length());
+//        }
+//
+//        templateName = templateName.replace('\\', '/');
+//        return templateName.replace('/', '.');
+
         if (templatePath == null) {
             throw new NullPointerException("Template name was null");
         }
@@ -175,6 +193,11 @@ public class SpringRockerReloadingBootstrap implements RockerReloadableBootstrap
         }
         if (suffix!=null && suffix.length()>0 && templateName.endsWith(suffix)) {
             templateName = templateName.substring(0, templateName.length() - suffix.length());
+        }
+
+        int pos = templateName.lastIndexOf(".");// .css .js
+        if(pos!=-1){
+            templateName = templateName.substring(0, pos);
         }
 
         templateName = templateName.replace('\\', '/');
