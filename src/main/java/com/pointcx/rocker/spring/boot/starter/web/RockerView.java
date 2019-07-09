@@ -42,7 +42,7 @@ public class RockerView extends AbstractTemplateView {
                 // ignore it
             }
         }
-
+        httpServletResponse.setContentType(properties.getContentType());
         OutputStreamOutput output = bindableRockerModel.render((contentType, charsetName) -> {
             try {
                 return new OutputStreamOutput(contentType, httpServletResponse.getOutputStream(), charsetName);
