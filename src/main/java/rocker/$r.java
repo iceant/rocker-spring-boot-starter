@@ -541,15 +541,9 @@ public class $r implements ApplicationContextAware {
     //////////////////////////////////////////////////////////////////////////
     ////
     static SpringRocker springRocker = null;
-    static RockerViewResolver rockerViewResolver = null;
-
-    private static void loadBeans(){
-        if(springRocker==null) springRocker = (SpringRocker) getBean(SpringRocker.class);
-        if(rockerViewResolver==null) rockerViewResolver = (RockerViewResolver) getBean(RockerViewResolver.class);
-    }
 
     public static BindableRockerModel template(String templatePath){
-        loadBeans();
+        if(springRocker==null) springRocker = (SpringRocker) getBean(SpringRocker.class);
         if(springRocker!=null){
             return springRocker.template(templatePath);
         }
@@ -557,7 +551,7 @@ public class $r implements ApplicationContextAware {
     }
 
     public static BindableRockerModel template(String templatePath, Object ... arguments){
-        loadBeans();
+        if(springRocker==null) springRocker = (SpringRocker) getBean(SpringRocker.class);
         if(springRocker!=null){
             return springRocker.template(templatePath, arguments);
         }

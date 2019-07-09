@@ -300,6 +300,7 @@ public class SpringRockerReloadingBootstrap implements RockerReloadableBootstrap
             }
 
             // create new classloader to force a new class load
+            this.classLoader = null;
             this.classLoader = buildClassLoader();
 
             return true;
