@@ -177,7 +177,6 @@ public class SpringRockerReloadingBootstrap implements RockerReloadableBootstrap
             templateName = templateName.substring(0, templateName.length() - suffix.length());
         }
 
-
         templateName = templateName.replace('\\', '/');
         return templateName.replace('/', '.');
     }

@@ -94,7 +94,7 @@ public class $r implements ApplicationContextAware {
         return null;
     }
 
-    public static List<String> names() {
+    public static List<String> attrNames() {
         HttpServletRequest request = request();
         if(request==null){
             return Collections.EMPTY_LIST;
@@ -118,11 +118,63 @@ public class $r implements ApplicationContextAware {
     }
 
     public static Object attr(String name){
-        HttpServletRequest request = request();
-        if(request==null){
-            return null;
-        }
-        return request.getAttribute(name);
+        return attr(name, null);
+    }
+
+    public static Integer attrInt(String name, Integer defaultValue){
+        return (Integer) attr(name, defaultValue);
+    }
+
+    public static Integer attrInt(String name){
+        return (Integer) attr(name);
+    }
+
+    public static Float attrFloat(String name, Float value){
+        return (Float) attr(name, value);
+    }
+
+    public static Float attrFloat(String name){
+        return (Float) attr(name);
+    }
+
+    public static Long attrLong(String name, Long defaultValue){
+        return (Long) attr(name, defaultValue);
+    }
+
+    public static Long attrLong(String name){
+        return (Long) attr(name);
+    }
+
+    public static Double attrDouble(String name, Double value){
+        return (Double) attr(name, value);
+    }
+
+    public static Double attrDoulbe(String name){
+        return (Double) attr(name);
+    }
+
+    public static Date attrDate(String name, Date defaultValue){
+        return (Date) attr(name, defaultValue);
+    }
+
+    public static Date attrDate(String name){
+        return (Date) attr(name);
+    }
+
+    public static String attrString(String name, String defaultValue){
+        return (String) attr(name, defaultValue);
+    }
+
+    public static String attrString(String name){
+        return (String) attr(name);
+    }
+
+    public static Boolean attrBoolean(String name, Boolean defaultValue){
+        return (Boolean) attr(name, defaultValue);
+    }
+
+    public static Boolean attrBoolean(String name){
+        return (Boolean) attr(name);
     }
 
     public static String path(String url) {
@@ -214,6 +266,16 @@ public class $r implements ApplicationContextAware {
 
     public static String paramString(String name) {
         return request().getParameter(name);
+    }
+
+    public static Boolean paramBoolean(String name, Boolean defaultValue){
+        String value = request().getParameter(name);
+        if(value==null) return defaultValue;
+        return Boolean.parseBoolean(value);
+    }
+
+    public static Boolean paramBoolean(String name){
+        return paramBoolean(name, null);
     }
 
     public static Integer paramInt(String name, Integer defaultValue) {
@@ -323,6 +385,23 @@ public class $r implements ApplicationContextAware {
         return simpleDateFormat.format(date);
     }
 
+    public static Date parseDate(String dateValue, String fmt){
+        SimpleDateFormat dateFormat = new SimpleDateFormat(fmt);
+        try {
+            return dateFormat.parse(dateValue);
+        } catch (ParseException e) {
+        }
+        return null;
+    }
+
+    public static Date parseDate(String dateValue, String fmt, Date defaultValue){
+        SimpleDateFormat dateFormat = new SimpleDateFormat(fmt);
+        try {
+            return dateFormat.parse(dateValue);
+        } catch (ParseException e) {
+        }
+        return defaultValue;
+    }
     // -----------------------------------------------------------------------
     //////////////////////////////////////////////////////////////////////////
     //// CSRF Helper
@@ -352,7 +431,7 @@ public class $r implements ApplicationContextAware {
         return token.getParameterName();
     }
     // -----------------------------------------------------------------------
-    public static Object field(String name, String field) {
+    public static Object field(String name, String field, Object defaultValue) {
         Object object = attr(name);
         if (object == null) return null;
         Class objectClass = object.getClass();
@@ -374,7 +453,17 @@ public class $r implements ApplicationContextAware {
         } catch (NoSuchMethodException e) {
         }
 
-        return null;
+        return defaultValue;
+    }
+
+    public static Object field(String key, Object defaultValue){
+        int pos = key.indexOf(".");
+        if (pos != -1) {
+            String objectName = key.substring(0, pos);
+            String fieldName = key.substring(pos + 1);
+            return field(objectName, fieldName, defaultValue);
+        }
+        return defaultValue;
     }
 
     /* 以 objectName.fieldName 格式获取 request.attribute 中的对象属性 */
@@ -388,6 +477,63 @@ public class $r implements ApplicationContextAware {
         return null;
     }
 
+    public static String fieldString(String key, String defaultValue){
+        return (String) field(key, defaultValue);
+    }
+
+    public static String fieldString(String key){
+        return (String) field(key);
+    }
+
+    public static Integer fieldInt(String key, Integer defaultValue){
+        return (Integer) field(key, defaultValue);
+    }
+
+    public static Integer fieldInt(String key){
+        return (Integer) field(key);
+    }
+
+    public static Float fieldFloat(String key, Float defaultValue){
+        return (Float) field(key, defaultValue);
+    }
+
+    public static Float fieldFloat(String key){
+        return (Float) field(key);
+    }
+
+    public static Long fieldLong(String key, Long defaultValue){
+        return (Long) field(key, defaultValue);
+    }
+
+    public static Long fieldLong(String key){
+        return (Long) field(key);
+    }
+
+    public static Double fieldDouble(String key, Double defaultValue){
+        return (Double) field(key, defaultValue);
+    }
+
+    public static Double fieldDouble(String key){
+        return (Double) field(key);
+    }
+
+    public static Date fieldDate(String key, Date defaultValue){
+        return (Date) field(key, defaultValue);
+    }
+
+    public static Date fieldDate(String key){
+        return (Date) field(key);
+    }
+
+    public static Boolean fieldBoolean(String key, Boolean defaultValue){
+        return (Boolean) field(key, defaultValue);
+    }
+
+    public static Boolean fieldBoolean(String key){
+        return (Boolean) field(key);
+    }
+
+    // -----------------------------------------------------------------------
     public static <T> T choose(boolean condition, T trueValue, T falseValue){
         return condition?trueValue:falseValue;
     }
