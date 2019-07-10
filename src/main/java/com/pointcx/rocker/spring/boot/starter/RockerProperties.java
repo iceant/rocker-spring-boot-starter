@@ -259,4 +259,36 @@ public class RockerProperties {
         this.allowSessionOverride = allowSessionOverride;
     }
 
+    public RockerProperties clone(){
+        RockerProperties properties = new RockerProperties();
+        properties = new RockerProperties();
+        properties.setPrefix(getPrefix());
+        properties.setSuffix(getSuffix());
+        properties.setAddAsSources(isAddAsSources());
+        properties.setAddAsTestSources(isAddAsTestSources());
+        properties.setAllowRequestOverride(isAllowRequestOverride());
+        properties.setAllowSessionOverride(isAllowSessionOverride());
+        properties.setClassDirectory(getClassDirectory());
+        properties.setContentType(getContentType());
+        properties.setDiscardLogicWhitespace(isDiscardLogicWhitespace());
+        properties.setEnabled(isEnabled());
+        properties.setExposeRequestAttributes(isExposeRequestAttributes());
+        properties.setExposeSessionAttributes(isExposeSessionAttributes());
+        properties.setExposeSpringMacroHelpers(isExposeSpringMacroHelpers());
+        properties.setExtendsClass(getExtendsClass());
+        properties.setExtendsModelClass(getExtendsModelClass());
+        properties.setFailOnError(isFailOnError());
+        properties.setJavaVersion(getJavaVersion());
+        properties.setOptimize(isOptimize());
+        properties.setOutputDirectory(getOutputDirectory());
+        properties.setReloading(isReloading());
+        properties.setSkip(isSkip());
+        properties.setSkipTouch(isSkipTouch());
+        properties.setTargetCharset(getTargetCharset());
+        properties.setSuffixRegex(getSuffixRegex());
+        properties.setTemplateDirectory(getTemplateDirectory());
+        properties.setTemplateResolverOrder(getTemplateResolverOrder());
+        properties.setTouchFile(getTouchFile());
+        return properties;
+    }
 }
