@@ -191,7 +191,7 @@ public class SpringRockerReloadingBootstrap implements RockerReloadableBootstrap
         String templateName = templatePath;
 
         if (prefix!=null && prefix.length()>0 && templateName.startsWith(prefix)) {
-            templateName = templateName.substring(prefix.length() + 1);
+            templateName = templateName.substring(prefix.length());
         }
         if (suffix!=null && suffix.length()>0 && templateName.endsWith(suffix)) {
             templateName = templateName.substring(0, templateName.length() - suffix.length());
