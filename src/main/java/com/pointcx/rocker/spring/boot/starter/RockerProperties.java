@@ -258,4 +258,5 @@ public class RockerProperties {
     public void setAllowSessionOverride(boolean allowSessionOverride) {
         this.allowSessionOverride = allowSessionOverride;
     }
+
 }

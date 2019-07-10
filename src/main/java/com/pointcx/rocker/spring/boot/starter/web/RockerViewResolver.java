@@ -48,27 +48,4 @@ public class RockerViewResolver extends UrlBasedViewResolver {
         view.setAllowSessionOverride(properties.isAllowSessionOverride());
         return view;
     }
-
-    public Resource resolveResource(String viewName, Locale locale) {
-        String l10n = "";
-        if (locale != null) {
-            LocaleEditor localeEditor = new LocaleEditor();
-            localeEditor.setValue(locale);
-            l10n = "_" + localeEditor.getAsText();
-        }
-        return resolveFromLocale(viewName, l10n);
-    }
-
-    private Resource resolveFromLocale(String viewName, String locale) {
-        String templatePath = properties.getPrefix() + viewName + locale + properties.getSuffix();
-        Resource resource = getApplicationContext().getResource(templatePath);
-        if (resource == null || !resource.exists()) {
-            if (locale.isEmpty()) {
-                return null;
-            }
-            int index = locale.lastIndexOf("_");
-            return resolveFromLocale(viewName, locale.substring(0, index));
-        }
-        return resource;
-    }
 }

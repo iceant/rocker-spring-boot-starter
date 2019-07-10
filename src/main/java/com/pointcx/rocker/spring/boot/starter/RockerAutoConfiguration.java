@@ -1,6 +1,8 @@
 package com.pointcx.rocker.spring.boot.starter;
 
 import com.fizzed.rocker.runtime.RockerBootstrap;
+import com.pointcx.rocker.spring.boot.starter.reload.DefaultResourceResolver;
+import com.pointcx.rocker.spring.boot.starter.reload.ResourceResolver;
 import com.pointcx.rocker.spring.boot.starter.reload.SpringRockerDefaultBootstrap;
 import com.pointcx.rocker.spring.boot.starter.reload.SpringRockerReloadingBootstrap;
 import com.pointcx.rocker.spring.boot.starter.web.RockerViewResolver;
@@ -12,6 +14,8 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import rocker.$r;
+
+import javax.annotation.Resource;
 
 @Configuration
 @ConditionalOnClass(RockerBootstrap.class)
@@ -26,12 +30,18 @@ public class RockerAutoConfiguration {
 
     @Bean
     @ConditionalOnMissingBean(RockerBootstrap.class)
-    public RockerBootstrap rockerBootstrap(){
+    public RockerBootstrap rockerBootstrap(ResourceResolver resourceResolver){
         if(properties.isReloading()){
-            return new SpringRockerReloadingBootstrap(properties);
+            return new SpringRockerReloadingBootstrap(properties, resourceResolver);
         }else{
             return new SpringRockerDefaultBootstrap(properties);
         }
+    }
+
+    @Bean
+    @ConditionalOnMissingBean(ResourceResolver.class)
+    public ResourceResolver resourceResolver(ApplicationContext applicationContext){
+        return new DefaultResourceResolver(applicationContext, properties);
     }
 
     @Bean

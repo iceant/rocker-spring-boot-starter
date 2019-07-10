@@ -47,17 +47,19 @@ public class SpringRockerReloadingBootstrap implements RockerReloadableBootstrap
     private ClassLoader classLoader;
     private Map<String, LoadedTemplate> templates;
     private Map<String, String> models;
+    private ResourceResolver resourceResolver;
 
-    public SpringRockerReloadingBootstrap(RockerProperties properties) {
-        this(properties, null);
+    public SpringRockerReloadingBootstrap(RockerProperties properties, ResourceResolver resourceResolver) {
+        this(properties, resourceResolver, null);
     }
 
-    public SpringRockerReloadingBootstrap(RockerProperties properties, ClassLoader classLoader) {
+    public SpringRockerReloadingBootstrap(RockerProperties properties, ResourceResolver resourceResolver, ClassLoader classLoader) {
         this.properties = properties;
         this.configuration = new RockerConfiguration();
         this.classLoader = (classLoader == null) ? buildClassLoader() : classLoader;
         this.templates = new ConcurrentHashMap<>();
         this.models = new ConcurrentHashMap<>();
+        this.resourceResolver=resourceResolver;
 
         if(properties.getTemplateDirectory()!=null){
             this.configuration.setTemplateDirectory(new File(properties.getTemplateDirectory()));
@@ -266,8 +268,7 @@ public class SpringRockerReloadingBootstrap implements RockerReloadableBootstrap
 
     public boolean compileIfNeeded(LoadedTemplate template, boolean verifyHeaderHash) {
         // recompile needed?
-
-        Resource resource = RockerInternalUtil.resolveResource(template.path, LocaleContextHolder.getLocale(), applicationContext, properties);
+        Resource resource = resourceResolver.resolve(template.path, LocaleContextHolder.getLocale());
         if(resource==null || !resource.exists()){
             return false;
         }
@@ -330,5 +331,13 @@ public class SpringRockerReloadingBootstrap implements RockerReloadableBootstrap
         }
 
         return false;
+    }
+
+    public ResourceResolver getResourceResolver() {
+        return resourceResolver;
+    }
+
+    public void setResourceResolver(ResourceResolver resourceResolver) {
+        this.resourceResolver = resourceResolver;
     }
 }
